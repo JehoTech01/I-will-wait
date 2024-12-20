@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yssai</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .countdown {
+            text-align: center;
+        }
+        .countdown h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 10px purple, 0 0 20px purple, 0 0 30px purple;
+        }
+        .time {
+            font-size: 2rem;
+            margin: 10px 0;
+            border: 2px solid purple;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #333;
+            color: #fff;
+            text-shadow: 0 0 10px purple, 0 0 20px purple, 0 0 30px purple;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <h1>I will wait...</h1>
+        <div class="time" id="countdown">Loading...</div>
+    </div>
+
+    <script>
+        function calculateRemainingTime() {
+            const startDate = new Date("2024-11-06T00:00:00");
+            const endDate = new Date("2029-11-06T00:00:00");
+            const currentDate = new Date();
+
+            // Calculate total time remaining in milliseconds
+            let remainingTime = endDate - currentDate;
+
+            if (remainingTime <= 0) {
+                return "00:00:00:00:00:00";
+            }
+
+            const millisecondsInSecond = 1000;
+            const secondsInMinute = 60;
+            const minutesInHour = 60;
+            const hoursInDay = 24;
+            const daysInMonth = 30; // Approximation for simplicity
+            const monthsInYear = 12;
+
+            // Calculate time components
+            let remainingMilliseconds = remainingTime;
+
+            const years = Math.floor(remainingMilliseconds / (millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay * daysInMonth * monthsInYear));
+            remainingMilliseconds %= millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay * daysInMonth * monthsInYear;
+
+            const months = Math.floor(remainingMilliseconds / (millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay * daysInMonth));
+            remainingMilliseconds %= millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay * daysInMonth;
+
+            const days = Math.floor(remainingMilliseconds / (millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay));
+            remainingMilliseconds %= millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay;
+
+            const hours = Math.floor(remainingMilliseconds / (millisecondsInSecond * secondsInMinute * minutesInHour));
+            remainingMilliseconds %= millisecondsInSecond * secondsInMinute * minutesInHour;
+
+            const minutes = Math.floor(remainingMilliseconds / (millisecondsInSecond * secondsInMinute));
+            remainingMilliseconds %= millisecondsInSecond * secondsInMinute;
+
+            const seconds = Math.floor(remainingMilliseconds / millisecondsInSecond);
+
+            return `${years.toString().padStart(2, '0')}:${months.toString().padStart(2, '0')}:${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateCountdown() {
+            const countdownElement = document.getElementById("countdown");
+            countdownElement.textContent = calculateRemainingTime();
+        }
+
+        function changeColorDaily() {
+            const colors = ["purple", "blue", "red", "green", "orange", "yellow", "pink"];
+            const today = new Date();
+            const dayIndex = today.getDate() % colors.length;
+            const selectedColor = colors[dayIndex];
+
+            const countdownTitle = document.querySelector(".countdown h1");
+            const countdownTime = document.querySelector(".time");
+
+            countdownTitle.style.textShadow = `0 0 10px ${selectedColor}, 0 0 20px ${selectedColor}, 0 0 30px ${selectedColor}`;
+            countdownTime.style.borderColor = selectedColor;
+            countdownTime.style.textShadow = `0 0 10px ${selectedColor}, 0 0 20px ${selectedColor}, 0 0 30px ${selectedColor}`;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call to display immediately
+        changeColorDaily();
+    </script>
+</body>
+</html>
